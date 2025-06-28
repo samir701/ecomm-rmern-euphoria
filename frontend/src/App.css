@@ -408,3 +408,287 @@
 .feedback-btn:hover {
   background: #d12c4a;
 }
+
+/* Product Detail Page Styles */
+.product-detail-container {
+  padding: 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  color: #e94560;
+  font-size: 1.1rem;
+  cursor: pointer;
+  margin-bottom: 24px;
+  padding: 8px 0;
+  transition: color 0.2s;
+}
+
+.back-btn:hover {
+  color: #d12c4a;
+}
+
+.product-detail-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: start;
+}
+
+.product-image-section {
+  position: sticky;
+  top: 100px;
+}
+
+.product-detail-image {
+  width: 100%;
+  height: 500px;
+  object-fit: cover;
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+}
+
+.product-info-section {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.product-detail-title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #222;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.product-rating {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.star {
+  font-size: 1.2rem;
+  color: #ddd;
+}
+
+.star.filled {
+  color: #ffd700;
+}
+
+.rating-text {
+  color: #666;
+  font-size: 1rem;
+}
+
+.product-price-large {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #e94560;
+}
+
+.product-description h3,
+.product-features h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 12px;
+}
+
+.product-description p {
+  font-size: 1.1rem;
+  color: #555;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.product-features ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.product-features li {
+  padding: 8px 0;
+  color: #555;
+  font-size: 1rem;
+  position: relative;
+  padding-left: 20px;
+}
+
+.product-features li:before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #e94560;
+  font-weight: bold;
+}
+
+.product-options {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.size-selection h3,
+.quantity-selection h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 12px;
+}
+
+.size-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.size-btn {
+  width: 50px;
+  height: 50px;
+  border: 2px solid #ddd;
+  background: white;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.size-btn:hover {
+  border-color: #e94560;
+}
+
+.size-btn.selected {
+  border-color: #e94560;
+  background: #e94560;
+  color: white;
+}
+
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.quantity-btn {
+  width: 40px;
+  height: 40px;
+  border: 2px solid #ddd;
+  background: white;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.quantity-btn:hover {
+  border-color: #e94560;
+  color: #e94560;
+}
+
+.quantity-display {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #222;
+  min-width: 30px;
+  text-align: center;
+}
+
+.product-actions {
+  display: flex;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.add-to-cart-btn,
+.buy-now-btn {
+  flex: 1;
+  padding: 16px 24px;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.add-to-cart-btn {
+  background: #e94560;
+  color: white;
+}
+
+.add-to-cart-btn:hover:not(:disabled) {
+  background: #d12c4a;
+}
+
+.add-to-cart-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.buy-now-btn {
+  background: #222;
+  color: white;
+}
+
+.buy-now-btn:hover {
+  background: #000;
+}
+
+.stock-status {
+  text-align: center;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.in-stock {
+  color: #28a745;
+  background: #d4edda;
+}
+
+.out-of-stock {
+  color: #dc3545;
+  background: #f8d7da;
+}
+
+@media (max-width: 900px) {
+  .product-detail-container {
+    padding: 16px;
+  }
+  
+  .product-detail-content {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  
+  .product-image-section {
+    position: static;
+  }
+  
+  .product-detail-image {
+    height: 300px;
+  }
+  
+  .product-detail-title {
+    font-size: 1.8rem;
+  }
+  
+  .product-price-large {
+    font-size: 1.6rem;
+  }
+  
+  .product-actions {
+    flex-direction: column;
+  }
+  
+  .size-buttons {
+    flex-wrap: wrap;
+  }
+}

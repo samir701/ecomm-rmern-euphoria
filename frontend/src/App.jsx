@@ -7,6 +7,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Men from './Men';
 import Women from './Women';
 import Kids from './Kids';
+import ProductDetail from './ProductDetail';
 
 const modelImg = "https://5.imimg.com/data5/SELLER/Default/2023/8/331924568/XU/AU/II/113132364/sari-photography-services-with-model-for-e-commerce-website-5-500x500.jpg";
 
@@ -197,6 +198,7 @@ function App() {
         <Route path="/men" element={<Men />} />
         <Route path='/women' element={<Women />} />
         <Route path='/kids' element={<Kids />} />
+        <Route path='/product/:id' element={<ProductDetail />} />
       </Routes>
     </Router>
   );

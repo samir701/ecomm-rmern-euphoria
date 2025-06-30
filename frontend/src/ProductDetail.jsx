@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useCart } from './CartContext';
 import './App.css';
 
 // Constant variable to store product details for all categories
@@ -447,6 +448,9 @@ const allProducts = {
 export default function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [quantity, setQuantity] = useState(1);
+  const [selectedSize, setSelectedSize] = useState('');
+  const { addToCart } = useCart();
 
   // Find product across all categories
   const findProduct = (productId) => {
@@ -459,6 +463,21 @@ export default function ProductDetail() {
   };
 
   const product = findProduct(id);
+
+  // Handle quantity changes
+  const handleQuantityChange = (change) => {
+    const newQuantity = quantity + change;
+    if (newQuantity >= 1 && newQuantity <= 99) {
+      setQuantity(newQuantity);
+    }
+  };
+
+  const handleQuantityInput = (e) => {
+    const value = parseInt(e.target.value);
+    if (value >= 1 && value <= 99) {
+      setQuantity(value);
+    }
+  };
 
   if (!product) {
     return (
@@ -526,7 +545,12 @@ export default function ProductDetail() {
                 <h3>Size</h3>
                 <div className="size-buttons">
                   {['XS', 'S', 'M', 'L', 'XL'].map(size => (
-                    <button key={size} className="size-btn">
+                    <button
+                      key={size}
+                      className={`size-btn${selectedSize === size ? ' selected' : ''}`}
+                      onClick={() => setSelectedSize(size)}
+                      type="button"
+                    >
                       {size}
                     </button>
                   ))}
@@ -536,21 +560,43 @@ export default function ProductDetail() {
               <div className="quantity-selection">
                 <h3>Quantity</h3>
                 <div className="quantity-controls">
-                  <button className="quantity-btn">-</button>
-                  <span className="quantity-display">1</span>
-                  <button className="quantity-btn">+</button>
+                  <button 
+                    className="quantity-btn" 
+                    onClick={() => handleQuantityChange(-1)}
+                    disabled={quantity <= 1}
+                  >
+                    -
+                  </button>
+                  <input
+                    type="number"
+                    value={quantity}
+                    onChange={handleQuantityInput}
+                    min="1"
+                    max="99"
+                    className="quantity-input"
+                  />
+                  <button 
+                    className="quantity-btn" 
+                    onClick={() => handleQuantityChange(1)}
+                    disabled={quantity >= 99}
+                  >
+                    +
+                  </button>
                 </div>
               </div>
             </div>
             
             <div className="product-actions">
               <button 
-                className={`add-to-cart-btn ${!product.inStock ? 'disabled' : ''}`}
-                disabled={!product.inStock}
+                className={`add-to-cart-btn ${!product.inStock || !selectedSize ? 'disabled' : ''}`}
+                disabled={!product.inStock || !selectedSize}
+                onClick={() => {
+                  addToCart(product, selectedSize, quantity);
+                }}
               >
                 {product.inStock ? 'Add to Cart' : 'Out of Stock'}
               </button>
-              <button className="buy-now-btn">Buy Now</button>
+              <button className="buy-now-btn" onClick={() => navigate('/cart')}>Go to Cart</button>
             </div>
             
             <div className={`stock-status ${product.inStock ? 'in-stock' : 'out-of-stock'}`}>

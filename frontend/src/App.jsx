@@ -8,6 +8,13 @@ import Men from './Men';
 import Women from './Women';
 import Kids from './Kids';
 import ProductDetail from './ProductDetail';
+import Cart from './Cart';
+import { CartProvider, useCart } from './CartContext';
+import Checkout from './Checkout';
+import { useForm, ValidationError } from '@formspree/react';
+import Login from './Login';
+import Register from './Register';
+import { AuthProvider, useAuth } from './AuthContext';
 
 const modelImg = "https://5.imimg.com/data5/SELLER/Default/2023/8/331924568/XU/AU/II/113132364/sari-photography-services-with-model-for-e-commerce-website-5-500x500.jpg";
 
@@ -63,6 +70,8 @@ const newCollectionProducts = [
 ];
 
 function Navbar() {
+  const { cart } = useCart();
+  const { token, user, logout } = useAuth();
   return (
     <header className="header">
       <div className="logo-section">
@@ -76,11 +85,20 @@ function Navbar() {
         <Link to="/kids">Kids</Link>
       </nav>
       <div className="header-actions">
-        <button className="login-btn">Login</button>
-        <div className="cart-icon">
+        {token ? (
+          <>
+            <span className="user-name" style={{ marginRight: 12 }}>
+              {user?.name || user?.email || 'User'}
+            </span>
+            <button className="login-btn" onClick={logout}>Logout</button>
+          </>
+        ) : (
+          <Link to="/login" className="login-btn">Login</Link>
+        )}
+        <Link to="/cart" className="cart-icon">
           <img src={cartIcon} alt="Cart" className="cart-svg" />
-          <span className="cart-badge">0</span>
-        </div>
+          <span className="cart-badge">{cart.reduce((sum, item) => sum + item.quantity, 0)}</span>
+        </Link>
       </div>
     </header>
   );
@@ -177,11 +195,10 @@ function HomePage() {
       <section className="feedback-section">
         <h2 className="feedback-title">Contact Us for More Details</h2>
         <p className="feedback-desc">Have questions, feedback, or want to know more about our collections and offers? Fill out the form below and our team will get back to you soon!</p>
-        
-        <form className="feedback-form" onSubmit={e => e.preventDefault()} >
-          <input type="text" className="feedback-input" placeholder="Your Name" required />
-          <input type="email" className="feedback-input" placeholder="Your Email" required />
-          <textarea className="feedback-textarea" placeholder="Your Message" rows="4" required></textarea>
+        <form className="feedback-form" action="https://formspree.io/f/xgvyrnrr" method="POST">
+          <input type="text" className="feedback-input" name="name" placeholder="Your Name" required />
+          <input type="email" className="feedback-input" name="email" placeholder="Your Email" required />
+          <textarea className="feedback-textarea" name="message" placeholder="Your Message" rows="4" required></textarea>
           <button type="submit" className="feedback-btn">Send Message</button>
         </form>
       </section>
@@ -191,16 +208,24 @@ function HomePage() {
 
 function App() {
   return (
-    <Router>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/men" element={<Men />} />
-        <Route path='/women' element={<Women />} />
-        <Route path='/kids' element={<Kids />} />
-        <Route path='/product/:id' element={<ProductDetail />} />
-      </Routes>
-    </Router>
+    <CartProvider>
+      <AuthProvider>
+        <Router>
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/men" element={<Men />} />
+            <Route path='/women' element={<Women />} />
+            <Route path='/kids' element={<Kids />} />
+            <Route path='/product/:id' element={<ProductDetail />} />
+            <Route path='/cart' element={<Cart />} />
+            <Route path='/checkout' element={<Checkout />} />
+            <Route path='/login' element={<Login />} />
+            <Route path='/register' element={<Register />} />
+          </Routes>
+        </Router>
+      </AuthProvider>
+    </CartProvider>
   );
 }
 

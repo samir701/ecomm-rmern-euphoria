@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import { TextField, Button, Box, Typography, Alert } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from './AuthContext';
+import { useCart } from './CartContext';
 
 const Login = () => {
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const navigate = useNavigate();
+  const { login } = useAuth();
+  const { setCartFromBackend } = useCart();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -24,7 +28,15 @@ const Login = () => {
       });
       const data = await res.json();
       if (res.ok && data.token) {
-        localStorage.setItem('token', data.token);
+        login(data.token, data.user || { email: form.email });
+        // Fetch cart from backend
+        const cartRes = await fetch('http://localhost:5000/api/cart', {
+          headers: { 'Authorization': `Bearer ${data.token}` },
+        });
+        if (cartRes.ok) {
+          const items = await cartRes.json();
+          setCartFromBackend(items);
+        }
         navigate('/');
       } else {
         setError(data.msg || 'Login failed');

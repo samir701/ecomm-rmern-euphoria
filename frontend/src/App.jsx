@@ -87,7 +87,8 @@ function Navbar() {
       <div className="header-actions">
         {token ? (
           <>
-            <span className="user-name" style={{ marginRight: 12 }}>
+            <span className="user-name" style={{ marginRight: 12, color: '#111', display: 'flex', alignItems: 'center', gap: 6 }}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{marginRight: 4}}><circle cx="12" cy="8" r="4"/><path d="M4 20c0-2.2 3.6-4 8-4s8 1.8 8 4"/></svg>
               {user?.name || user?.email || 'User'}
             </span>
             <button className="login-btn" onClick={logout}>Logout</button>
@@ -208,8 +209,8 @@ function HomePage() {
 
 function App() {
   return (
-    <CartProvider>
-      <AuthProvider>
+    <AuthProvider>
+      <CartProvider>
         <Router>
           <Navbar />
           <Routes>
@@ -224,8 +225,8 @@ function App() {
             <Route path='/register' element={<Register />} />
           </Routes>
         </Router>
-      </AuthProvider>
-    </CartProvider>
+      </CartProvider>
+    </AuthProvider>
   );
 }
 

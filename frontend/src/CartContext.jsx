@@ -7,7 +7,16 @@ export function useCart() {
 }
 
 export function CartProvider({ children }) {
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState(() => {
+    // Load cart from localStorage if available
+    const storedCart = localStorage.getItem('cart');
+    return storedCart ? JSON.parse(storedCart) : [];
+  });
+
+  // Function to set cart from backend
+  const setCartFromBackend = (items) => {
+    setCart(items || []);
+  };
 
   const addToCart = (product, size, quantity) => {
     // Check if item with same id and size exists
@@ -35,11 +44,36 @@ export function CartProvider({ children }) {
     setCart(cart => cart.filter((_, i) => i !== index));
   };
 
-  const clearCart = () => setCart([]);
+  const clearCart = () => {
+    setCart([]);
+    localStorage.removeItem('cart');
+  };
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart, clearCart }}>
+    <CartContext.Provider value={{ cart, addToCart, removeFromCart, clearCart, setCartFromBackend }}>
+      <CartSync cart={cart} />
       {children}
     </CartContext.Provider>
   );
+}
+
+// CartSync component for backend sync
+import { useEffect } from 'react';
+import { useAuth } from './AuthContext';
+function CartSync({ cart }) {
+  const { token } = useAuth();
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(cart));
+    if (token) {
+      fetch('http://localhost:5000/api/cart', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ items: cart }),
+      });
+    }
+  }, [cart, token]);
+  return null;
 } 

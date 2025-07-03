@@ -8,22 +8,27 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     const storedToken = localStorage.getItem('token');
+    const storedUser = localStorage.getItem('user');
     if (storedToken) {
       setToken(storedToken);
-      setUser({}); // You can fetch user info here if needed
+      setUser(storedUser ? JSON.parse(storedUser) : {});
     }
   }, []);
 
-  const login = (jwtToken) => {
+  // Accepts both token and user info
+  const login = (jwtToken, userInfo) => {
     setToken(jwtToken);
-    setUser({}); // Optionally fetch user info
+    setUser(userInfo);
     localStorage.setItem('token', jwtToken);
+    localStorage.setItem('user', JSON.stringify(userInfo));
   };
 
   const logout = () => {
     setToken(null);
     setUser(null);
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    localStorage.removeItem('cart'); // Only clear localStorage, not cart state
   };
 
   return (

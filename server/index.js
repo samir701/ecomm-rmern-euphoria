@@ -1,11 +1,9 @@
+require('dotenv').config();
 const express = require('express');
-const dotenv = require('dotenv');
 const cors = require('cors');
 const connectDB = require('./config/db');
 const cartRoutes = require('./routes/cart');
-
-// Load env vars
-dotenv.config();
+const paymentRoutes = require('./routes/payment');
 
 // Connect to database
 connectDB();
@@ -20,6 +18,7 @@ app.use(cors());
 
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/cart', cartRoutes);
+app.use('/api/payment', paymentRoutes);
 
 app.get('/', (req, res) => {
     res.send('API is running...');

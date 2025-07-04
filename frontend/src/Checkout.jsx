@@ -6,6 +6,8 @@ import './App.css';
 export default function Checkout() {
   const { cart } = useCart();
   const navigate = useNavigate();
+  const [showPayment, setShowPayment] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   // Shipping form state
   const [shipping, setShipping] = useState({
@@ -18,7 +20,6 @@ export default function Checkout() {
   });
   const [billingSame, setBillingSame] = useState(true);
   const [billing, setBilling] = useState({ ...shipping });
-  const [card, setCard] = useState({ number: '', expiry: '', cvc: '', name: '' });
   const [submitted, setSubmitted] = useState(false);
 
   // Calculate totals
@@ -36,21 +37,19 @@ export default function Checkout() {
     if (billingSame) setBilling({ ...shipping, [e.target.name]: e.target.value });
   };
   const handleBillingChange = e => setBilling({ ...billing, [e.target.name]: e.target.value });
-  const handleCardChange = e => setCard({ ...card, [e.target.name]: e.target.value });
 
   const handleSubmit = e => {
     e.preventDefault();
     setSubmitted(true);
   };
 
-  if (submitted) {
+  if (success) {
     return (
-      <div className="app-container">
-        <div className="product-detail-container">
-          <h2>Payment Successful!</h2>
-          <p>Thank you for your order. (This is a frontend demo.)</p>
-          <button className="add-to-cart-btn" onClick={() => navigate('/')}>Back to Shop</button>
-        </div>
+      <div style={{ padding: 40 }}>
+        <h2 style={{ color: '#333' }}>Thank you for your order!</h2>
+        <button style={{ marginTop: 20, padding: '16px 40px', fontSize: 24, fontWeight: 'bold', background: '#e74c5b', color: '#fff', border: 'none', borderRadius: 20, cursor: 'pointer' }} onClick={() => window.location.href = '/'}>
+          Back to Shop
+        </button>
       </div>
     );
   }
@@ -88,14 +87,6 @@ export default function Checkout() {
                 </>
               )}
             </div>
-            {/* Payment Info */}
-            <div className="checkout-section">
-              <h3>Payment</h3>
-              <input name="number" placeholder="Card Number" value={card.number} onChange={handleCardChange} required maxLength={19} />
-              <input name="expiry" placeholder="MM/YY" value={card.expiry} onChange={handleCardChange} required maxLength={5} />
-              <input name="cvc" placeholder="CVC" value={card.cvc} onChange={handleCardChange} required maxLength={4} />
-              <input name="name" placeholder="Name on Card" value={card.name} onChange={handleCardChange} required />
-            </div>
             {/* Order Summary */}
             <div className="checkout-section order-summary-section">
               <h3>Order Summary</h3>
@@ -115,7 +106,7 @@ export default function Checkout() {
               </div>
             </div>
           </div>
-          <button className="buy-now-btn" type="submit" style={{ marginTop: 32, width: '100%' }}>Pay Now</button>
+          <button className="buy-now-btn" type="button" style={{ marginTop: 32, width: '100%' }} onClick={() => navigate('/payment')}>Pay Now</button>
         </form>
       </div>
     </div>

@@ -15,6 +15,7 @@ import { useForm, ValidationError } from '@formspree/react';
 import Login from './Login';
 import Register from './Register';
 import { AuthProvider, useAuth } from './AuthContext';
+import PaymentPage from './PaymentPage';
 
 const modelImg = "https://5.imimg.com/data5/SELLER/Default/2023/8/331924568/XU/AU/II/113132364/sari-photography-services-with-model-for-e-commerce-website-5-500x500.jpg";
 
@@ -223,6 +224,7 @@ function App() {
             <Route path='/checkout' element={<Checkout />} />
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
+            <Route path="/payment" element={<PaymentPage />} />
           </Routes>
         </Router>
       </CartProvider>

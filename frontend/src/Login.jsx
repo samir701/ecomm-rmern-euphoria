@@ -29,15 +29,13 @@ const Login = () => {
       const data = await res.json();
       if (res.ok && data.token) {
         login(data.token, data.user || { email: form.email });
-        // Fetch cart from backend
-        const cartRes = await fetch('http://localhost:5000/api/cart', {
+        navigate('/'); // Redirect immediately for speed
+        // Fetch cart from backend in the background
+        fetch('http://localhost:5000/api/cart', {
           headers: { 'Authorization': `Bearer ${data.token}` },
-        });
-        if (cartRes.ok) {
-          const items = await cartRes.json();
-          setCartFromBackend(items);
-        }
-        navigate('/');
+        })
+          .then(cartRes => cartRes.ok ? cartRes.json() : null)
+          .then(items => { if (items) setCartFromBackend(items); });
       } else {
         setError(data.msg || 'Login failed');
       }
@@ -47,7 +45,7 @@ const Login = () => {
   };
 
   return (
-    <Box width="212.1vh" Height="100vh" display="flex" 
+    <Box width="212.1vh" height="100vh" display="flex" 
     alignItems="center" justifyContent="center" sx={{ 
       background: '#fff', color: '#111' }}>
       <Box maxWidth={400} width="100%" p={4} borderRadius={2} boxShadow={3} sx={{ background: '#fff', color: '#111' }}>

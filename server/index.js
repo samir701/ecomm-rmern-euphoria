@@ -18,7 +18,7 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cors({
     origin: process.env.NODE_ENV === 'production' 
         ? process.env.FRONTEND_URL || 'https://your-frontend-domain.com'
-        : true,
+        : ['http://localhost:5173', 'http://localhost:3000', 'http://localhost:3001'],
     credentials: true
 }));
 

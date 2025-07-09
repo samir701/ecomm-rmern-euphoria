@@ -4,6 +4,7 @@ const User = require('../models/User');
 
 // Register User
 exports.registerUser = async (req, res) => {
+    const start = Date.now();
     const { name, email, password } = req.body;
 
     try {
@@ -36,6 +37,7 @@ exports.registerUser = async (req, res) => {
             { expiresIn: 3600 },
             (err, token) => {
                 if (err) throw err;
+                console.log('Register process took', Date.now() - start, 'ms');
                 res.json({ token });
             }
         );
@@ -47,6 +49,7 @@ exports.registerUser = async (req, res) => {
 
 // Login User
 exports.loginUser = async (req, res) => {
+    const start = Date.now();
     const { email, password } = req.body;
 
     try {
@@ -74,6 +77,7 @@ exports.loginUser = async (req, res) => {
             { expiresIn: 3600 },
             (err, token) => {
                 if (err) throw err;
+                console.log('Login process took', Date.now() - start, 'ms');
                 res.json({ token });
             }
         );
